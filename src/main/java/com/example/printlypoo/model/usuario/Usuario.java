@@ -11,14 +11,13 @@ public class Usuario {
     private String cidade;
     private String estado;
     private String endereco;
-    private String tipoPerfil;
+
 
     public Usuario() {}
 
     public Usuario(String nome, String email, String senha,
                    String cpfCnpj, String telefone, String cep,
-                   String cidade, String estado, String endereco,
-                   String tipoPerfil) {
+                   String cidade, String estado, String endereco) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -28,14 +27,14 @@ public class Usuario {
         this.cidade = cidade;
         this.estado = estado;
         this.endereco = endereco;
-        this.tipoPerfil = tipoPerfil;
+
     }
 
 
     public String paraTexto() {
         return nome + "|" + email + "|" + senha + "|" + cpfCnpj + "|" +
                 telefone + "|" + cep + "|" + cidade + "|" + estado + "|" +
-                endereco + "|" + tipoPerfil;
+                endereco ;
     }
 
 
@@ -50,8 +49,8 @@ public class Usuario {
                 partes[5], // cep
                 partes[6], // cidade
                 partes[7], // estado
-                partes[8], // endereco
-                partes[9]  // tipoPerfil
+                partes[8] // endereco
+
         );
     }
 
@@ -83,11 +82,10 @@ public class Usuario {
     public String getEndereco() { return endereco; }
     public void setEndereco(String endereco) { this.endereco = endereco; }
 
-    public String getTipoPerfil() { return tipoPerfil; }
-    public void setTipoPerfil(String tipoPerfil) { this.tipoPerfil = tipoPerfil; }
+
 
     @Override
     public String toString() {
-        return nome + " | " + email + " | " + tipoPerfil;
+        return nome + " | " + email ;
     }
 }

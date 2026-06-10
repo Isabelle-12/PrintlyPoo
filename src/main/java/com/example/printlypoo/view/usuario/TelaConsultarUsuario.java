@@ -35,11 +35,23 @@ public class TelaConsultarUsuario {
         colTelefone.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getTelefone()));
 
-        TableColumn<Usuario, String> colTipo = new TableColumn<>("Tipo");
-        colTipo.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getTipoPerfil()));
+        TableColumn<Usuario, String> colEndereco = new TableColumn<>("Endereço");
+        colEndereco.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEndereco()));
 
-        tabela.getColumns().addAll(colNome, colEmail, colCpf, colTelefone, colTipo);
+        TableColumn<Usuario, String> colcep = new TableColumn<>("CEP");
+        colcep.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCep()));
+
+        TableColumn<Usuario, String> colEstado = new TableColumn<>("Estado");
+        colEstado.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEstado()));
+
+        TableColumn<Usuario, String> colCidade = new TableColumn<>("Cidade");
+        colCidade.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCidade()));
+
+        tabela.getColumns().addAll(colNome, colEmail, colCpf, colTelefone, colEndereco, colcep, colEstado, colCidade);
 
 
         UsuarioController ctrl = new UsuarioController();

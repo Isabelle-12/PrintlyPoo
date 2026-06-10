@@ -25,9 +25,7 @@ public class TelaInserirUsuario {
         TextField txtCidade = new TextField();
         TextField txtEstado = new TextField();
         TextField txtEndereco = new TextField();
-        ComboBox<String> cbTipo = new ComboBox<>();
-        cbTipo.getItems().addAll("CLIENTE", "FABRICANTE");
-        cbTipo.setValue("CLIENTE");
+
 
         Label lblMsg = new Label("");
 
@@ -66,8 +64,8 @@ public class TelaInserirUsuario {
                         txtCep.getText(),
                         txtCidade.getText(),
                         txtEstado.getText(),
-                        txtEndereco.getText(),
-                        cbTipo.getValue()
+                        txtEndereco.getText()
+
                 );
 
                 new UsuarioController().inserir(u);
@@ -83,7 +81,7 @@ public class TelaInserirUsuario {
                 txtCidade.clear();
                 txtEstado.clear();
                 txtEndereco.clear();
-                cbTipo.setValue("CLIENTE");
+
 
             } catch (Exception ex) {
                 lblMsg.setText("Erro ao salvar: " + ex.getMessage());
@@ -106,7 +104,7 @@ public class TelaInserirUsuario {
         grid.add(new Label("Cidade:"), 0, 6);    grid.add(txtCidade, 1, 6);
         grid.add(new Label("Estado:"), 0, 7);    grid.add(txtEstado, 1, 7);
         grid.add(new Label("Endereço:"), 0, 8);  grid.add(txtEndereco, 1, 8);
-        grid.add(new Label("Tipo:"), 0, 9);      grid.add(cbTipo, 1, 9);
+
 
         HBox botoes = new HBox(10, btnSalvar, btnLimpar, btnVoltar);
         VBox layout = new VBox(10, grid, botoes, lblMsg);

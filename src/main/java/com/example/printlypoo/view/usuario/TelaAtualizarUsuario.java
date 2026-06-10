@@ -24,8 +24,7 @@ public class TelaAtualizarUsuario {
         TextField txtCidade = new TextField();
         TextField txtEstado = new TextField();
         TextField txtEndereco = new TextField();
-        ComboBox<String> cbTipo = new ComboBox<>();
-        cbTipo.getItems().addAll("CLIENTE", "FABRICANTE");
+
 
 
         txtNome.setText(u.getNome());
@@ -37,7 +36,7 @@ public class TelaAtualizarUsuario {
         txtCidade.setText(u.getCidade());
         txtEstado.setText(u.getEstado());
         txtEndereco.setText(u.getEndereco());
-        cbTipo.setValue(u.getTipoPerfil());
+
 
         Label lblMsg = new Label("");
         Button btnSalvar = new Button("Salvar alterações");
@@ -70,8 +69,8 @@ public class TelaAtualizarUsuario {
                         txtCep.getText().trim(),
                         txtCidade.getText().trim(),
                         txtEstado.getText().trim(),
-                        txtEndereco.getText().trim(),
-                        cbTipo.getValue()
+                        txtEndereco.getText().trim()
+
                 );
 
                 new UsuarioController().atualizar(indice, usuarioAtualizado);
@@ -99,7 +98,7 @@ public class TelaAtualizarUsuario {
         grid.add(new Label("Cidade:"),    0, 6);  grid.add(txtCidade,   1, 6);
         grid.add(new Label("Estado:"),    0, 7);  grid.add(txtEstado,   1, 7);
         grid.add(new Label("Endereço:"), 0, 8);  grid.add(txtEndereco, 1, 8);
-        grid.add(new Label("Tipo:"),      0, 9);  grid.add(cbTipo,      1, 9);
+        
 
         HBox botoes = new HBox(10, btnSalvar, btnCancelar);
         VBox layout = new VBox(10, grid, botoes, lblMsg);

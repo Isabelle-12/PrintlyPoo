@@ -19,7 +19,7 @@ public class TelaExcluirUsuario {
         Label lblNome = new Label("Nome: " + u.getNome());
         Label lblEmail = new Label("E-mail: " + u.getEmail());
         Label lblCpf = new Label("CPF/CNPJ: " + u.getCpfCnpj());
-        Label lblTipo = new Label("Tipo: " + u.getTipoPerfil());
+
         Label lblMsg = new Label("");
 
         Button btnConfirmar = new Button("Confirmar Exclusão");
@@ -44,7 +44,6 @@ public class TelaExcluirUsuario {
                 lblNome,
                 lblEmail,
                 lblCpf,
-                lblTipo,
                 new Separator(),
                 new HBox(10, btnConfirmar, btnCancelar),
                 lblMsg
