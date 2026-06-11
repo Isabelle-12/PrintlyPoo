@@ -7,4 +7,7 @@ module com.example.printlypoo {
 
     opens com.example.printlypoo to javafx.fxml;
     exports com.example.printlypoo;
+    exports com.example.printlypoo.view.fabricante;
+    opens com.example.printlypoo.view.fabricante to javafx.graphics;
+    opens com.example.printlypoo.model.fabricante to javafx.base, javafx.graphics;
 }
