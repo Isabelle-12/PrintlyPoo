@@ -1,4 +1,4 @@
-package com.example.printlypoo.model;
+package com.example.printlypoo.model.notificacao;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -92,4 +92,8 @@ public class Notificacao implements Serializable {
     public void marcarComoLida() {
             this.lida = true;
     }
+    public void desmarcarLida() {
+            this.lida = false;
+    }
+
 }

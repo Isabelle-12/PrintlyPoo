@@ -1,6 +1,6 @@
-package com.example.printlypoo.controller;
+package com.example.printlypoo.controller.notificacao;
 
-import com.example.printlypoo.model.Notificacao;
+import com.example.printlypoo.model.notificacao.Notificacao;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,14 +20,14 @@ public class NotificacaoController {
                     .mapToInt(Notificacao::getId).max().orElse(0) + 1;
         }
     }
-    // CREATE
+
     public Notificacao criarNotificacao(String tipo, String titulo, String mensagem, String email) {
         try {
             Notificacao n = new Notificacao(proximoId, tipo, titulo, mensagem, email);
             notificacoes.add(n);
             proximoId++;
 
-            salvar(); // ADICIONADO
+            salvar();
 
             return n;
 
@@ -37,12 +37,11 @@ public class NotificacaoController {
         }
     }
 
-    // READ (todas)
+
     public List<Notificacao> listarNotificacoes() {
             return notificacoes;
     }
 
-    // READ (por id)
     public Notificacao buscarPorId(int id) {
         for (Notificacao n : notificacoes) {
             if (n.getId() == id) return n;
@@ -50,7 +49,6 @@ public class NotificacaoController {
         return null;
     }
 
-    // UPDATE
     public void atualizarNotificacao(int id, String tipo, String titulo, String mensagem, String email) {
         try {
             Notificacao n = buscarPorId(id);
@@ -64,14 +62,14 @@ public class NotificacaoController {
             n.setMensagem(mensagem);
             n.setEmailDestino(email);
 
-            salvar(); // ADICIONADO
+            salvar();
 
         } catch (Exception e) {
             System.out.println("Erro ao atualizar notificação: " + e.getMessage());
         }
     }
 
-    // MARCAR COMO LIDA
+
     public void marcarComoLida(int id) {
         try {
             Notificacao n = buscarPorId(id);
@@ -83,7 +81,17 @@ public class NotificacaoController {
         }
     }
 
-    // DELETE
+    public void marcarComoNLida(int id) {
+        try {
+            Notificacao n = buscarPorId(id);
+            if (n == null) throw new IllegalArgumentException("Notificação não encontrada");
+            n.desmarcarLida();
+            salvar();
+        } catch (Exception e) {
+            System.out.println("Erro ao marcar como lida: " + e.getMessage());
+        }
+    }
+
     public void removerNotificacao(int id) {
         try {
             Notificacao n = buscarPorId(id);
@@ -94,21 +102,16 @@ public class NotificacaoController {
 
             notificacoes.remove(n);
 
-            salvar(); // ADICIONADO
+            salvar();
 
         } catch (Exception e) {
             System.out.println("Erro ao remover notificação: " + e.getMessage());
         }
     }
 
-    // =========================
-    // PERSISTÊNCIA (ADICIONADO)
-    // =========================
-
     private void salvar() {
         try (ObjectOutputStream oos =
                      new ObjectOutputStream(new FileOutputStream(ARQUIVO))) {
-
             oos.writeObject(notificacoes);
 
         } catch (IOException e) {
@@ -119,17 +122,37 @@ public class NotificacaoController {
     }
 
     private List<Notificacao> carregar() {
-        try (ObjectInputStream ois =
-                     new ObjectInputStream(new FileInputStream(ARQUIVO))) {
-
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO))) {
             return (List<Notificacao>) ois.readObject();
-
         } catch (IOException e) {
             System.out.println("Erro de leitura: " + e.getMessage());
             return new ArrayList<>();
         } catch (ClassNotFoundException e) {
             System.out.println("Versão incompatível do arquivo: " + e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public boolean arquivoExiste() {
+        return new File(ARQUIVO).exists();
+    }
+
+    public void criarArquivoVazio() {
+        notificacoes = new ArrayList<>();
+        proximoId = 1;
+        salvar();
+    }
+
+    public void recarregar() {
+        notificacoes = carregar();
+
+        if (!notificacoes.isEmpty()) {
+            proximoId = notificacoes.stream()
+                    .mapToInt(Notificacao::getId)
+                    .max()
+                    .orElse(0) + 1;
+        } else {
+            proximoId = 1;
         }
     }
 }

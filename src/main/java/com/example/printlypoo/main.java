@@ -1,6 +1,8 @@
     package com.example.printlypoo;
 
 
+    import com.example.printlypoo.view.avaliacao.AvaliacaoVW;
+    import com.example.printlypoo.view.notificacao.NotificacaoVW;
     import com.example.printlypoo.view.usuario.TelaConsultarUsuario;
     import com.example.printlypoo.view.usuario.TelaInserirUsuario;
     import com.example.printlypoo.view.anuncio.TelaConsultarAnuncio;
@@ -86,6 +88,20 @@
             btnConsultarImpressora.setOnAction(e -> new TelaConsultarImpressora().exibir());
 
             //---------------------------------------------------------------------------------------//
+            // Paula - Avaliacoes/Notificacoes
+//            Label lblNotifAval = new Label("Gerenciamento de Avaliações e Notificações do sistema");
+//            lblNotifAval.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+//
+//            Button btnConsultarNotif = new Button("Consultar Notificacoes");
+//            Button btnConsultarAvaliacoes = new Button("Consultar Avaliacoes");
+//
+//            btnConsultarNotif.setMaxWidth(200);
+//            btnConsultarAvaliacoes.setMaxWidth(200);
+//
+//            btnConsultarNotif.setOnAction(e -> new NotificacaoVW().show(new Stage()));
+//            btnConsultarAvaliacoes.setOnAction(e -> new AvaliacaoVW().show(new Stage()));
+
+            //---------------------------------------------------------------------------------------//
 
             VBox layout = new VBox(15,
                     lblTitulo,
@@ -105,6 +121,10 @@
                     lblImpressoras,
                     btnInserirImpressora,
                     btnConsultarImpressora
+//                    new Separator(),
+//                    lblNotifAval,
+//                    btnConsultarNotif,
+//                    btnConsultarAvaliacoes
             );
             layout.setAlignment(Pos.CENTER);
             layout.setPadding(new Insets(40));

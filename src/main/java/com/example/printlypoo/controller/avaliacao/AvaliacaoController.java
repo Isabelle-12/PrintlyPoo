@@ -1,6 +1,6 @@
-package com.example.printlypoo.controller;
+package com.example.printlypoo.controller.avaliacao;
 
-import com.example.printlypoo.model.Avaliacao;
+import com.example.printlypoo.model.avaliacao.Avaliacao;
 import com.example.printlypoo.model.ValidacaoException;
 import java.io.*;
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ public class AvaliacaoController {
         this.proximoId = avaliacoes.stream()
                 .mapToInt(Avaliacao::getId).max().orElse(0) + 1;
     }
-    // CREATE
+
     public Avaliacao criarAvaliacao(int nota, String comentario) {
         try {
             Avaliacao a = new Avaliacao(proximoId, nota, comentario);
             avaliacoes.add(a);
             proximoId++;
-            salvar(); // ADICIONADO
+            salvar();
 
             return a;
 
@@ -34,12 +34,10 @@ public class AvaliacaoController {
         }
     }
 
-    // READ (todas)
     public List<Avaliacao> listarAvaliacoes() {
             return avaliacoes;
     }
 
-    // READ (por id)
     public Avaliacao buscarPorId(int id) {
         for (Avaliacao a : avaliacoes) {
             if (a.getId() == id) return a;
@@ -48,7 +46,7 @@ public class AvaliacaoController {
     }
 
 
-    // UPDATE
+
     public void atualizarAvaliacao(int id, int novaNota, String novoComentario) {
         try {
             Avaliacao a = buscarPorId(id);
@@ -60,7 +58,7 @@ public class AvaliacaoController {
             a.setNota(novaNota);
             a.setComentarioCliente(novoComentario);
 
-            salvar(); // ADICIONADO
+            salvar();
 
         } catch (ValidacaoException e) {
             System.out.println("Nota inválida: " + e.getMessage());
@@ -69,7 +67,6 @@ public class AvaliacaoController {
         }
     }
 
-    // DELETE
     public void removerAvaliacao(int id) {
         try {
             Avaliacao a = buscarPorId(id);
@@ -80,16 +77,13 @@ public class AvaliacaoController {
 
             avaliacoes.remove(a);
 
-            salvar(); // ADICIONADO
+            salvar();
 
         } catch (Exception e) {
             System.out.println("Erro ao remover avaliação: " + e.getMessage());
         }
     }
 
-    // =========================
-    // PERSISTÊNCIA (ADICIONADO)
-    // =========================
 
     private void salvar() {
         try (ObjectOutputStream oos =
@@ -105,11 +99,8 @@ public class AvaliacaoController {
     }
 
     private List<Avaliacao> carregar() {
-        try (ObjectInputStream ois =
-                     new ObjectInputStream(new FileInputStream(ARQUIVO))) {
-
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO))) {
             return (List<Avaliacao>) ois.readObject();
-
         } catch (IOException e) {
             System.out.println("Erro de leitura: " + e.getMessage());
             return new ArrayList<>();
@@ -119,5 +110,27 @@ public class AvaliacaoController {
         }
     }
 
+    public boolean arquivoExiste() {
+        return new File(ARQUIVO).exists();
+    }
+
+    public void criarArquivoVazio() {
+        avaliacoes = new ArrayList<>();
+        proximoId = 1;
+        salvar();
+    }
+
+    public void recarregar() {
+        avaliacoes = carregar();
+
+        if (!avaliacoes.isEmpty()) {
+            proximoId = avaliacoes.stream()
+                    .mapToInt(Avaliacao::getId)
+                    .max()
+                    .orElse(0) + 1;
+        } else {
+            proximoId = 1;
+        }
+    }
 
 }

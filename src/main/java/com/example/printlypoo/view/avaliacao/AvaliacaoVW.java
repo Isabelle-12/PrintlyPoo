@@ -1,6 +1,8 @@
-package com.example.printlypoo.view;
+package com.example.printlypoo.view.avaliacao;
 
-import com.example.printlypoo.controller.AvaliacaoController;
+import com.example.printlypoo.controller.avaliacao.AvaliacaoController;
+import com.example.printlypoo.model.avaliacao.Avaliacao;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -12,96 +14,106 @@ public class AvaliacaoVW {
 
     public void show(Stage stage) {
 
+        TextField txtId = new TextField();
+        txtId.setPromptText("ID da Avaliação (ou clique na tabela)");
 
         TextField txtNota = new TextField();
-
         txtNota.setPromptText("Nota (1-5)");
 
-
         TextField txtComentario = new TextField();
-
         txtComentario.setPromptText("Comentário");
 
-
         TextArea area = new TextArea();
-
         area.setEditable(false);
 
+        TableView<Avaliacao> tabela = new TableView<>();
+
+        TableColumn<Avaliacao, String> colId = new TableColumn<>("ID");
+        colId.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getId())));
+
+        TableColumn<Avaliacao, String> colNota = new TableColumn<>("Nota");
+        colNota.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getNota())));
+
+        TableColumn<Avaliacao, String> colComentario = new TableColumn<>("Comentário");
+        colComentario.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComentarioCliente()));
+
+        tabela.getColumns().addAll(colId, colNota, colComentario);
+        tabela.setPrefHeight(180);
+        tabela.getItems().addAll(controller.listarAvaliacoes());
+
+        tabela.getSelectionModel().selectedItemProperty().addListener((obs, ant, sel) -> {
+            if (sel != null) {
+                txtId.setText(String.valueOf(sel.getId()));
+                txtNota.setText(String.valueOf(sel.getNota()));
+                txtComentario.setText(sel.getComentarioCliente());
+            }
+        });
 
         Button btnCriar = new Button("Criar Avaliação");
-
-        Button btnListar = new Button("Listar");
-
+        Button btnAtualizar = new Button("Atualizar");
+        Button btnRemover = new Button("Remover");
+        Button btnRecarregar = new Button("Recarregar");
 
         btnCriar.setOnAction(e -> {
-
             try {
+                boolean notaVazia = txtNota.getText().isBlank();
+                boolean comentarioVazio = txtComentario.getText().isBlank();
+
+                if (notaVazia && comentarioVazio) {
+                    area.setText("Preencha todos os campos.");
+                    return;
+                }
+                if (notaVazia) {
+                    area.setText("Preencha o campo: Nota.");
+                    return;
+                }
+                if (comentarioVazio) {
+                    area.setText("Preencha o campo: Comentário.");
+                    return;
+                }
 
                 int nota = Integer.parseInt(txtNota.getText());
 
-                String comentario = txtComentario.getText();
+                if (nota < 1 || nota > 5) {
+                    area.setText("Nota inválida: digite um valor entre 1 e 5.");
+                    return;
+                }
 
-
-                controller.criarAvaliacao(nota, comentario);
-
-
+                controller.criarAvaliacao(nota, txtComentario.getText());
+                tabela.getItems().setAll(controller.listarAvaliacoes());
                 txtNota.clear();
-
                 txtComentario.clear();
-
-
+                txtId.clear();
                 area.setText("Criado com sucesso!");
 
-
+            } catch (NumberFormatException ex) {
+                area.setText("Nota inválida: digite apenas números no campo Nota.");
             } catch (Exception ex) {
-
                 area.setText("Erro: " + ex.getMessage());
-
             }
-
         });
-
-
-        btnListar.setOnAction(e -> {
-
-            StringBuilder sb = new StringBuilder();
-
-
-            controller.listarAvaliacoes().forEach(a ->
-
-                    sb.append("ID: ")
-
-                            .append(a.getId())
-
-                            .append(" | Nota: ")
-
-                            .append(a.getNota())
-
-                            .append(" | ")
-
-                            .append(a.getComentarioCliente())
-
-                            .append("\n")
-
-            );
-
-
-            area.setText(sb.toString());
-
-        });
-
-        TextField txtId = new TextField();
-        txtId.setPromptText("ID da Avaliação");
-
-        Button btnAtualizar = new Button("Atualizar");
-        Button btnRemover = new Button("Remover");
 
         btnAtualizar.setOnAction(e -> {
             try {
+                if (txtId.getText().isBlank()) {
+                    area.setText("Selecione uma avaliação na tabela ou informe o ID.");
+                    return;
+                }
+
                 int id = Integer.parseInt(txtId.getText());
                 int nota = Integer.parseInt(txtNota.getText());
+
+                if (nota < 1 || nota > 5) {
+                    area.setText("Nota inválida: digite um valor entre 1 e 5.");
+                    return;
+                }
+
                 controller.atualizarAvaliacao(id, nota, txtComentario.getText());
+                tabela.getItems().setAll(controller.listarAvaliacoes());
                 area.setText("Atualizado com sucesso!");
+
+            } catch (NumberFormatException ex) {
+                area.setText("ID e Nota devem ser números inteiros.");
             } catch (Exception ex) {
                 area.setText("Erro: " + ex.getMessage());
             }
@@ -109,27 +121,62 @@ public class AvaliacaoVW {
 
         btnRemover.setOnAction(e -> {
             try {
+                if (txtId.getText().isBlank()) {
+                    area.setText("Selecione uma avaliação na tabela ou informe o ID.");
+                    return;
+                }
+
                 int id = Integer.parseInt(txtId.getText());
                 controller.removerAvaliacao(id);
+                tabela.getItems().setAll(controller.listarAvaliacoes());
+                txtId.clear();
+                txtNota.clear();
+                txtComentario.clear();
                 area.setText("Removido com sucesso!");
+
+            } catch (NumberFormatException ex) {
+                area.setText("ID deve ser um número inteiro.");
             } catch (Exception ex) {
                 area.setText("Erro: " + ex.getMessage());
             }
         });
 
+        btnRecarregar.setOnAction(e -> {
 
-        VBox root = new VBox(10, txtId, txtNota, txtComentario, btnCriar, btnListar, btnAtualizar, btnRemover, area);
+            if (!controller.arquivoExiste()) {
 
+                Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                alerta.setTitle("Arquivo não encontrado");
+                alerta.setHeaderText("O arquivo de avaliações não existe.");
+                alerta.setContentText("Deseja criar um novo arquivo?");
 
-        Scene scene = new Scene(root, 400, 300);
+                ButtonType btnSim = new ButtonType("Criar Arquivo");
+                ButtonType btnNao = new ButtonType("Cancelar");
 
+                alerta.getButtonTypes().setAll(btnSim, btnNao);
 
+                alerta.showAndWait().ifPresent(resposta -> {
+                    if (resposta == btnSim) {
+                        controller.criarArquivoVazio();
+                        tabela.getItems().clear();
+                        area.setText("Arquivo criado com sucesso.");
+                    }
+                });
+
+                return;
+            }
+
+            controller.recarregar();
+            tabela.getItems().setAll(controller.listarAvaliacoes());
+
+            area.setText("Tabela recarregada.");
+        });
+
+        VBox root = new VBox(10, tabela, txtId, txtNota, txtComentario, btnCriar, btnAtualizar, btnRemover, btnRecarregar, area);
+
+        Scene scene = new Scene(root, 500, 540);
         stage.setTitle("Avaliações");
-
         stage.setScene(scene);
-
         stage.show();
-
     }
-
 }

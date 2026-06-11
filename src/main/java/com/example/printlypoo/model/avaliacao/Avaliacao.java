@@ -1,4 +1,6 @@
-package com.example.printlypoo.model;
+package com.example.printlypoo.model.avaliacao;
+
+import com.example.printlypoo.model.ValidacaoException;
 
 import java.io.Serializable;
 
