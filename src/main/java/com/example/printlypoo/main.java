@@ -11,6 +11,8 @@
     import com.example.printlypoo.view.fabricante.TelaInserirFabricante;
     import com.example.printlypoo.view.fabricante.TelaConsultarImpressora;
     import com.example.printlypoo.view.fabricante.TelaInserirImpressora;
+    import com.example.printlypoo.view.pedido.TelaConsultarPedido;
+    import com.example.printlypoo.view.pedido.TelaInserirPedido;
     import javafx.application.Application;
     import javafx.geometry.Insets;
     import javafx.geometry.Pos;
@@ -102,6 +104,19 @@
 //            btnConsultarAvaliacoes.setOnAction(e -> new AvaliacaoVW().show(new Stage()));
 
             //---------------------------------------------------------------------------------------//
+            // Pedro - Pedidos
+            Label lblPedidos = new Label("Gerenciamento de Pedidos");
+            lblPedidos.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+            Button btnInserirPedido = new Button("Cadastrar Pedido");
+            Button btnConsultarPedido = new Button("Consultar Pedidos");
+
+            btnInserirPedido.setMaxWidth(200);
+            btnConsultarPedido.setMaxWidth(200);
+
+            btnInserirPedido.setOnAction(e -> new TelaInserirPedido().exibir());
+            btnConsultarPedido.setOnAction(e -> new TelaConsultarPedido().exibir());
+            //---------------------------------------------------------------------------------------//
 
             VBox layout = new VBox(15,
                     lblTitulo,
@@ -120,7 +135,11 @@
                     new Separator(),
                     lblImpressoras,
                     btnInserirImpressora,
-                    btnConsultarImpressora
+                    btnConsultarImpressora,
+                    new Separator(),
+                    lblPedidos,
+                    btnInserirPedido,
+                    btnConsultarPedido
 //                    new Separator(),
 //                    lblNotifAval,
 //                    btnConsultarNotif,
