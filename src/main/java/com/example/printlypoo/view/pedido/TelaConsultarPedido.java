@@ -2,6 +2,7 @@ package com.example.printlypoo.view.pedido;
 
 import com.example.printlypoo.controller.pedido.PedidoController;
 import com.example.printlypoo.model.pedido.Pedido;
+import com.example.printlypoo.view.historicostatus.TelaConsultarHistorico;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
 import java.util.List;
 
 public class TelaConsultarPedido {
@@ -59,18 +61,19 @@ public class TelaConsultarPedido {
         coldataSolicitacao.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getdataSolicitacao()));
 
-        tabela.getColumns().addAll(colid, colfabricante, colmaterial, colquantidade, colvalorTotal, colstatus, colmotivoRecusa, colenderecoEntrega, colprazoPedido, coldataSolicitacao);
-
+        tabela.getColumns().addAll(colid, colfabricante, colmaterial, colquantidade,
+                colvalorTotal, colstatus, colmotivoRecusa, colenderecoEntrega,
+                colprazoPedido, coldataSolicitacao);
 
         PedidoController ctrl = new PedidoController();
         List<Pedido> lista = ctrl.listar();
         tabela.setItems(FXCollections.observableArrayList(lista));
 
-        // Botões
-        Button btnEditar = new Button("Editar selecionado");
-        Button btnExcluir = new Button("Excluir selecionado");
+        Button btnEditar    = new Button("Editar selecionado");
+        Button btnExcluir   = new Button("Excluir selecionado");
+        Button btnHistorico = new Button("Ver histórico de status");
         Button btnAtualizar = new Button("Atualizar lista");
-        Button btnVoltar = new Button("Voltar");
+        Button btnVoltar    = new Button("Voltar");
         btnVoltar.setOnAction(e -> stage.close());
 
         btnEditar.setOnAction(e -> {
@@ -89,12 +92,12 @@ public class TelaConsultarPedido {
             int idx = tabela.getSelectionModel().getSelectedIndex();
             if (idx >= 0) {
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                        "Deseja excluir este pedido?",
-                        ButtonType.YES, ButtonType.NO);
+                        "Deseja excluir este pedido?", ButtonType.YES, ButtonType.NO);
                 confirm.showAndWait().ifPresent(resp -> {
                     if (resp == ButtonType.YES) {
                         ctrl.excluir(idx);
                         tabela.getItems().remove(idx);
+                        lista.remove(idx);
                     }
                 });
             } else {
@@ -103,16 +106,30 @@ public class TelaConsultarPedido {
             }
         });
 
-        btnAtualizar.setOnAction(e -> {
-            List<Pedido> novaLista = ctrl.listar();
-            tabela.setItems(FXCollections.observableArrayList(novaLista));
+        // Abre a tela de histórico de status filtrada pelo pedido selecionado
+        btnHistorico.setOnAction(e -> {
+            int idx = tabela.getSelectionModel().getSelectedIndex();
+            if (idx >= 0) {
+                Pedido selecionado = lista.get(idx);
+                new TelaConsultarHistorico().exibirPorPedido(selecionado.getid());
+            } else {
+                new Alert(Alert.AlertType.WARNING,
+                        "Selecione um pedido para ver o histórico.").showAndWait();
+            }
         });
 
-        HBox botoes = new HBox(10, btnEditar, btnExcluir, btnAtualizar, btnVoltar);
+        btnAtualizar.setOnAction(e -> {
+            List<Pedido> novaLista = ctrl.listar();
+            lista.clear();
+            lista.addAll(novaLista);
+            tabela.setItems(FXCollections.observableArrayList(lista));
+        });
+
+        HBox botoes = new HBox(10, btnEditar, btnExcluir, btnHistorico, btnAtualizar, btnVoltar);
         VBox layout = new VBox(10, tabela, botoes);
         layout.setPadding(new Insets(15));
 
-        stage.setScene(new Scene(layout, 700, 400));
+        stage.setScene(new Scene(layout, 900, 420));
         stage.show();
     }
 }

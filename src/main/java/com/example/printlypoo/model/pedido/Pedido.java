@@ -13,9 +13,9 @@ public class Pedido {
     private String prazoPedido;
     private String dataSolicitacao;
 
-    public Pedido() {}
-
-    public Pedido(String id, String fabricante, String material, String quantidade, String valorTotal, String status, String motivoRecusa, String enderecoEntrega, String prazoPedido, String dataSolicitacao) {
+    public Pedido(String id, String fabricante, String material, String quantidade,
+                  String valorTotal, String status, String motivoRecusa,
+                  String enderecoEntrega, String prazoPedido, String dataSolicitacao) {
         this.id = id;
         this.fabricante = fabricante;
         this.material = material;
@@ -26,67 +26,45 @@ public class Pedido {
         this.enderecoEntrega = enderecoEntrega;
         this.prazoPedido = prazoPedido;
         this.dataSolicitacao = dataSolicitacao;
-
     }
 
-
+    // Serializa o objeto em uma única linha de texto para persistência em arquivo
     public String paraTexto() {
-        return id + "|" + fabricante + "|" + material + "|" + quantidade + "|" + valorTotal + "|" + status + "|" + motivoRecusa + "|" + enderecoEntrega + "|" + prazoPedido + "|" + dataSolicitacao ;
+        return id + "|" + fabricante + "|" + material + "|" + quantidade + "|"
+                + valorTotal + "|" + status + "|" + motivoRecusa + "|"
+                + enderecoEntrega + "|" + prazoPedido + "|" + dataSolicitacao;
     }
 
-
+    // Desserializa uma linha de texto lida do arquivo para um objeto Pedido
     public static Pedido deTexto(String linha) {
-        String[] partes = linha.split("\\|");
+        String[] partes = linha.split("\\|", -1);
         return new Pedido(
-                partes[0], // id
-                partes[1], // fabricante
-                partes[2], // material
-                partes[3], // quantidade
-                partes[4], // valorTotal
-                partes[5], // status
-                partes[6], // motivoRecusa
-                partes[7], // enderecoEntrega
-                partes[8], // prazoPedido
-                partes[9] // dataSolicitacao
-
+                partes[0], partes[1], partes[2], partes[3], partes[4],
+                partes[5], partes[6], partes[7], partes[8], partes[9]
         );
     }
 
-    // Getters e Setters de todos os atributos
-    public String getid() { return id; }
-    public void setid(String id) { this.id = id; }
-
-    public String getfabricante() { return fabricante; }
-    public void setfabricante(String fabricante) { this.fabricante = fabricante; }
-
-    public String getmaterial() { return material; }
-    public void setmaterial(String material) { this.material = material; }
-
-    public String getquantidade() { return quantidade; }
-    public void setquantidade(String quantidade) { this.quantidade = quantidade; }
-
-    public String getvalorTotal() { return valorTotal; }
-    public void setvalorTotal(String valorTotal) { this.valorTotal = valorTotal; }
-
-    public String getstatus() { return status; }
-    public void setstatus(String status) { this.status = status; }
-
-    public String getmotivoRecusa() { return motivoRecusa; }
-    public void setmotivoRecusa(String motivoRecusa) { this.motivoRecusa = motivoRecusa; }
-
+    // Getters
+    public String getid()              { return id; }
+    public String getfabricante()      { return fabricante; }
+    public String getmaterial()        { return material; }
+    public String getquantidade()      { return quantidade; }
+    public String getvalorTotal()      { return valorTotal; }
+    public String getstatus()          { return status; }
+    public String getmotivoRecusa()    { return motivoRecusa; }
     public String getenderecoEntrega() { return enderecoEntrega; }
-    public void setenderecoEntrega(String enderecoEntrega) { this.enderecoEntrega = enderecoEntrega; }
-
-    public String getprazoPedido() { return prazoPedido; }
-    public void setprazoPedido(String prazoPedido) { this.prazoPedido = prazoPedido; }
-
+    public String getprazoPedido()     { return prazoPedido; }
     public String getdataSolicitacao() { return dataSolicitacao; }
-    public void setdataSolicitacao(String dataSolicitacao) { this.dataSolicitacao = dataSolicitacao; }
 
-
-
-    @Override
-    public String toString() {
-        return id + " | " + status ;
-    }
+    // Setters
+    public void setid(String id)                       { this.id = id; }
+    public void setfabricante(String fabricante)       { this.fabricante = fabricante; }
+    public void setmaterial(String material)           { this.material = material; }
+    public void setquantidade(String quantidade)       { this.quantidade = quantidade; }
+    public void setvalorTotal(String valorTotal)       { this.valorTotal = valorTotal; }
+    public void setstatus(String status)               { this.status = status; }
+    public void setmotivoRecusa(String motivoRecusa)   { this.motivoRecusa = motivoRecusa; }
+    public void setenderecoEntrega(String e)           { this.enderecoEntrega = e; }
+    public void setprazoPedido(String prazoPedido)     { this.prazoPedido = prazoPedido; }
+    public void setdataSolicitacao(String d)           { this.dataSolicitacao = d; }
 }
