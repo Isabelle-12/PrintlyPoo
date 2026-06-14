@@ -14,6 +14,11 @@ import com.example.printlypoo.view.pedido.TelaConsultarPedido;
 import com.example.printlypoo.view.pedido.TelaInserirPedido;
 import com.example.printlypoo.view.historicostatus.TelaConsultarHistorico;
 import com.example.printlypoo.view.historicostatus.TelaInserirHistorico;
+
+// SUAS IMPORTS ADICIONADAS:
+import com.example.printlypoo.view.fabricante.MaterialMakerView;
+import com.example.printlypoo.view.fabricante.PortifolioMakerView;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -53,7 +58,7 @@ public class main extends Application {
         Label lblAnuncios = new Label("Gerenciamento de Anúncios");
         lblAnuncios.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        Button btnInserirAnuncio = new Button("Cadastrar Anúncio");
+        Button btnInserirAnuncio = new Button("Cadastrar Anuncio");
         Button btnConsultarAnuncio = new Button("Consultar Anúncios");
 
         btnInserirAnuncio.setMaxWidth(200);
@@ -89,6 +94,33 @@ public class main extends Application {
 
         btnInserirImpressora.setOnAction(e -> new TelaInserirImpressora().exibir());
         btnConsultarImpressora.setOnAction(e -> new TelaConsultarImpressora().exibir());
+
+        //---------------------------------------------------------------------------------------//
+        // Bruno - Materiais e Portifólio
+        Label lblBruno = new Label("Configurações do Fabricante");
+        lblBruno.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Button btnMateriais = new Button("Gerenciar Materiais");
+        Button btnPortifolio = new Button("Gerenciar Portifólio");
+
+        btnMateriais.setMaxWidth(200);
+        btnPortifolio.setMaxWidth(200);
+
+        btnMateriais.setOnAction(e -> {
+            try {
+                new MaterialMakerView().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        btnPortifolio.setOnAction(e -> {
+            try {
+                new PortifolioMakerView().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         //---------------------------------------------------------------------------------------//
         // Paula - Avaliacoes/Notificacoes
@@ -153,6 +185,13 @@ public class main extends Application {
                 btnInserirImpressora,
                 btnConsultarImpressora,
                 new Separator(),
+
+                // SEUS BOTÕES ADICIONADOS NO CORPO DO LAYOUT:
+                lblBruno,
+                btnMateriais,
+                btnPortifolio,
+                new Separator(),
+
                 lblPedidos,
                 btnInserirPedido,
                 btnConsultarPedido,
@@ -168,7 +207,8 @@ public class main extends Application {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
 
-        stage.setScene(new Scene(layout, 350, 750));
+
+        stage.setScene(new Scene(layout, 350, 880));
         stage.show();
     }
 
