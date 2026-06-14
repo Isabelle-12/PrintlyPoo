@@ -16,6 +16,10 @@ import com.example.printlypoo.view.historicostatus.TelaConsultarHistorico;
 import com.example.printlypoo.view.historicostatus.TelaInserirHistorico;
 import com.example.printlypoo.view.fabricante.MaterialMakerView;
 import com.example.printlypoo.view.fabricante.PortifolioMakerView;
+import com.example.printlypoo.view.projeto3d.TelaInserirProjeto3D;
+import com.example.printlypoo.view.projeto3d.TelaConsultarProjeto3D;
+import com.example.printlypoo.view.entregapedido.TelaInserirEntregaPedido;
+import com.example.printlypoo.view.entregapedido.TelaConsultarEntregaPedido;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -162,6 +166,26 @@ public class main extends Application {
         });
 
         //---------------------------------------------------------------------------------------//
+        // Laura - Projetos 3D e Entregas
+        Label lblLaura = new Label("Projetos 3D e Entregas");
+        lblLaura.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Button btnInserirProjeto = new Button("Cadastrar Projeto 3D");
+        Button btnConsultarProjeto = new Button("Consultar Projetos 3D");
+        Button btnInserirEntrega = new Button("Registrar Entrega");
+        Button btnConsultarEntrega = new Button("Consultar Entregas");
+
+        btnInserirProjeto.setMaxWidth(200);
+        btnConsultarProjeto.setMaxWidth(200);
+        btnInserirEntrega.setMaxWidth(200);
+        btnConsultarEntrega.setMaxWidth(200);
+
+        btnInserirProjeto.setOnAction(e -> new TelaInserirProjeto3D().exibir());
+        btnConsultarProjeto.setOnAction(e -> new TelaConsultarProjeto3D().exibir());
+        btnInserirEntrega.setOnAction(e -> new TelaInserirEntregaPedido().exibir());
+        btnConsultarEntrega.setOnAction(e -> new TelaConsultarEntregaPedido().exibir());
+
+        //---------------------------------------------------------------------------------------//
         VBox layout = new VBox(15,
                 lblTitulo,
                 new Separator(),
@@ -196,6 +220,12 @@ public class main extends Application {
                 lblBruno,
                 btnMateriais,
                 btnPortifolio,
+                new Separator(),
+                lblLaura,
+                btnInserirProjeto,
+                btnConsultarProjeto,
+                btnInserirEntrega,
+                btnConsultarEntrega,
                 new Separator()
         );
         layout.setAlignment(Pos.CENTER);
