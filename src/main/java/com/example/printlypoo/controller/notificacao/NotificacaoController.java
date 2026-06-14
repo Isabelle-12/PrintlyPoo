@@ -14,11 +14,7 @@ public class NotificacaoController {
     private final String ARQUIVO = "data" + File.separator + "notificacoes.dat";
 
     public NotificacaoController() {
-        this.notificacoes = carregar();
-        if (!notificacoes.isEmpty()) {
-            this.proximoId = notificacoes.stream()
-                    .mapToInt(Notificacao::getId).max().orElse(0) + 1;
-        }
+        recarregar();
     }
 
     public Notificacao criarNotificacao(String tipo, String titulo, String mensagem, String email) {

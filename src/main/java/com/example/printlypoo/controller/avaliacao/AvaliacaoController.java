@@ -2,6 +2,8 @@ package com.example.printlypoo.controller.avaliacao;
 
 import com.example.printlypoo.model.avaliacao.Avaliacao;
 import com.example.printlypoo.model.ValidacaoException;
+import com.example.printlypoo.model.notificacao.Notificacao;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +16,7 @@ public class AvaliacaoController {
     private final String ARQUIVO = "data" + File.separator + "avaliacoes.dat";
 
     public AvaliacaoController() {
-        this.avaliacoes = carregar();
-        this.proximoId = avaliacoes.stream()
-                .mapToInt(Avaliacao::getId).max().orElse(0) + 1;
+        recarregar();
     }
 
     public Avaliacao criarAvaliacao(int nota, String comentario) {
@@ -84,6 +84,22 @@ public class AvaliacaoController {
         }
     }
 
+    public void responderAvaliacao(int id, String resposta) {
+        try {
+            Avaliacao a = buscarPorId(id);
+
+            if (a == null) {
+                throw new IllegalArgumentException("Avaliação não encontrada");
+            }
+
+            a.responderFabricante(resposta);
+
+            salvar();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao responder avaliação: " + e.getMessage());
+        }
+    }
 
     private void salvar() {
         try (ObjectOutputStream oos =

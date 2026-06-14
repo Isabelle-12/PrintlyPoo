@@ -2,6 +2,7 @@ package com.example.printlypoo.view.notificacao;
 
 import com.example.printlypoo.controller.notificacao.NotificacaoController;
 import com.example.printlypoo.model.notificacao.Notificacao;
+import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -52,7 +53,11 @@ public class NotificacaoVW {
         TableColumn<Notificacao, String> colLida = new TableColumn<>("Lida");
         colLida.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().isLida() ? "Sim" : "Não"));
 
-        tabela.getColumns().addAll(colId, colTitulo, colTipo, colMensagem, colEmail, colLida);
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        TableColumn<Notificacao, String> colData = new TableColumn<>("Data de Envio");
+        colData.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDataEnvio().format(formatoData)));
+
+        tabela.getColumns().addAll(colId, colTitulo, colTipo, colMensagem, colEmail, colLida,colData);
         tabela.setPrefHeight(180);
         tabela.getItems().addAll(controller.listarNotificacoes());
 

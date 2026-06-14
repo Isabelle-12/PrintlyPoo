@@ -14,11 +14,9 @@ import com.example.printlypoo.view.pedido.TelaConsultarPedido;
 import com.example.printlypoo.view.pedido.TelaInserirPedido;
 import com.example.printlypoo.view.historicostatus.TelaConsultarHistorico;
 import com.example.printlypoo.view.historicostatus.TelaInserirHistorico;
-
-// SUAS IMPORTS ADICIONADAS:
 import com.example.printlypoo.view.fabricante.MaterialMakerView;
 import com.example.printlypoo.view.fabricante.PortifolioMakerView;
-
+import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,7 +56,7 @@ public class main extends Application {
         Label lblAnuncios = new Label("Gerenciamento de Anúncios");
         lblAnuncios.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        Button btnInserirAnuncio = new Button("Cadastrar Anuncio");
+        Button btnInserirAnuncio = new Button("Cadastrar Anúncio");
         Button btnConsultarAnuncio = new Button("Consultar Anúncios");
 
         btnInserirAnuncio.setMaxWidth(200);
@@ -96,45 +94,18 @@ public class main extends Application {
         btnConsultarImpressora.setOnAction(e -> new TelaConsultarImpressora().exibir());
 
         //---------------------------------------------------------------------------------------//
-        // Bruno - Materiais e Portifólio
-        Label lblBruno = new Label("Configurações do Fabricante");
-        lblBruno.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-
-        Button btnMateriais = new Button("Gerenciar Materiais");
-        Button btnPortifolio = new Button("Gerenciar Portifólio");
-
-        btnMateriais.setMaxWidth(200);
-        btnPortifolio.setMaxWidth(200);
-
-        btnMateriais.setOnAction(e -> {
-            try {
-                new MaterialMakerView().start(new Stage());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        btnPortifolio.setOnAction(e -> {
-            try {
-                new PortifolioMakerView().start(new Stage());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        //---------------------------------------------------------------------------------------//
         // Paula - Avaliacoes/Notificacoes
-//        Label lblNotifAval = new Label("Gerenciamento de Avaliações e Notificações do sistema");
-//        lblNotifAval.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-//
-//        Button btnConsultarNotif = new Button("Consultar Notificacoes");
-//        Button btnConsultarAvaliacoes = new Button("Consultar Avaliacoes");
-//
-//        btnConsultarNotif.setMaxWidth(200);
-//        btnConsultarAvaliacoes.setMaxWidth(200);
-//
-//        btnConsultarNotif.setOnAction(e -> new NotificacaoVW().show(new Stage()));
-//        btnConsultarAvaliacoes.setOnAction(e -> new AvaliacaoVW().show(new Stage()));
+        Label lblNotifAval = new Label("Gerenciamento de Avaliações \ne Notificações do sistema");
+        lblNotifAval.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Button btnConsultarNotif = new Button("Consultar Notificacoes");
+        Button btnConsultarAvaliacoes = new Button("Consultar Avaliacoes");
+
+        btnConsultarNotif.setMaxWidth(200);
+        btnConsultarAvaliacoes.setMaxWidth(200);
+
+        btnConsultarNotif.setOnAction(e -> new NotificacaoVW().show(new Stage()));
+        btnConsultarAvaliacoes.setOnAction(e -> new AvaliacaoVW().show(new Stage()));
 
         //---------------------------------------------------------------------------------------//
         // Pedro - Pedidos
@@ -163,9 +134,34 @@ public class main extends Application {
 
         btnInserirHistorico.setOnAction(e -> new TelaInserirHistorico().exibir());
         btnConsultarHistorico.setOnAction(e -> new TelaConsultarHistorico().exibir());
+        //---------------------------------------------------------------------------------------//
+        // Bruno - Materiais e Portfólio
+        Label lblBruno = new Label("Configurações do Fabricante");
+        lblBruno.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Button btnMateriais = new Button("Gerenciar Materiais");
+        Button btnPortifolio = new Button("Gerenciar Portfólio");
+
+        btnMateriais.setMaxWidth(200);
+        btnPortifolio.setMaxWidth(200);
+
+        btnMateriais.setOnAction(e -> {
+            try {
+                new MaterialMakerView().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        btnPortifolio.setOnAction(e -> {
+            try {
+                new PortifolioMakerView().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         //---------------------------------------------------------------------------------------//
-
         VBox layout = new VBox(15,
                 lblTitulo,
                 new Separator(),
@@ -185,30 +181,35 @@ public class main extends Application {
                 btnInserirImpressora,
                 btnConsultarImpressora,
                 new Separator(),
-
-                // SEUS BOTÕES ADICIONADOS NO CORPO DO LAYOUT:
-                lblBruno,
-                btnMateriais,
-                btnPortifolio,
+                lblNotifAval,
+                btnConsultarAvaliacoes,
+                btnConsultarNotif,
                 new Separator(),
-
                 lblPedidos,
                 btnInserirPedido,
                 btnConsultarPedido,
                 new Separator(),
                 lblHistorico,
                 btnInserirHistorico,
-                btnConsultarHistorico
-//                new Separator(),
-//                lblNotifAval,
-//                btnConsultarNotif,
-//                btnConsultarAvaliacoes
+                btnConsultarHistorico,
+                new Separator(),
+                lblBruno,
+                btnMateriais,
+                btnPortifolio,
+                new Separator()
         );
         layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(40));
+        layout.setPadding(new Insets(20));
 
+        ScrollPane scrollPane = new ScrollPane(layout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
 
-        stage.setScene(new Scene(layout, 350, 880));
+        Scene scene = new Scene(scrollPane, 400, 700);
+
+        stage.setScene(scene);
+        stage.setMinWidth(400);
+        stage.setMinHeight(700);
         stage.show();
     }
 

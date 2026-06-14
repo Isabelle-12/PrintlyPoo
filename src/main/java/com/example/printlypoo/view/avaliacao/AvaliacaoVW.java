@@ -23,6 +23,9 @@ public class AvaliacaoVW {
         TextField txtComentario = new TextField();
         txtComentario.setPromptText("Comentário");
 
+        TextField txtResposta = new TextField();
+        txtResposta.setPromptText("Resposta do Fabricante");
+
         TextArea area = new TextArea();
         area.setEditable(false);
 
@@ -37,7 +40,10 @@ public class AvaliacaoVW {
         TableColumn<Avaliacao, String> colComentario = new TableColumn<>("Comentário");
         colComentario.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComentarioCliente()));
 
-        tabela.getColumns().addAll(colId, colNota, colComentario);
+        TableColumn<Avaliacao, String> colResposta = new TableColumn<>("Resposta");
+        colResposta.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRespostaFabricante() == null ? "" : data.getValue().getRespostaFabricante()));
+
+        tabela.getColumns().addAll(colId, colNota, colComentario,colResposta);
         tabela.setPrefHeight(180);
         tabela.getItems().addAll(controller.listarAvaliacoes());
 
@@ -46,6 +52,7 @@ public class AvaliacaoVW {
                 txtId.setText(String.valueOf(sel.getId()));
                 txtNota.setText(String.valueOf(sel.getNota()));
                 txtComentario.setText(sel.getComentarioCliente());
+                txtResposta.setText(sel.getRespostaFabricante() == null ? "" : sel.getRespostaFabricante());
             }
         });
 
@@ -53,6 +60,7 @@ public class AvaliacaoVW {
         Button btnAtualizar = new Button("Atualizar");
         Button btnRemover = new Button("Remover");
         Button btnRecarregar = new Button("Recarregar");
+        Button btnResponder = new Button("Responder");
 
         btnCriar.setOnAction(e -> {
             try {
@@ -140,6 +148,28 @@ public class AvaliacaoVW {
                 area.setText("Erro: " + ex.getMessage());
             }
         });
+        btnResponder.setOnAction(e -> {
+            try {
+                if (txtId.getText().isBlank()) {
+                    area.setText("Selecione uma avaliação na tabela ou informe o ID.");
+                    return;
+                }
+                if (txtResposta.getText().isBlank()) {
+                    area.setText("Preencha o campo: Resposta.");
+                    return;
+                }
+
+                int id = Integer.parseInt(txtId.getText());
+                controller.responderAvaliacao(id, txtResposta.getText());
+                tabela.getItems().setAll(controller.listarAvaliacoes());
+                area.setText("Resposta registrada com sucesso!");
+
+            } catch (NumberFormatException ex) {
+                area.setText("ID deve ser um número inteiro.");
+            } catch (Exception ex) {
+                area.setText("Erro: " + ex.getMessage());
+            }
+        });
 
         btnRecarregar.setOnAction(e -> {
 
@@ -172,7 +202,7 @@ public class AvaliacaoVW {
             area.setText("Tabela recarregada.");
         });
 
-        VBox root = new VBox(10, tabela, txtId, txtNota, txtComentario, btnCriar, btnAtualizar, btnRemover, btnRecarregar, area);
+        VBox root = new VBox(10, tabela, txtId, txtNota, txtComentario,txtResposta, btnCriar, btnAtualizar, btnRemover,btnResponder, btnRecarregar, area);
 
         Scene scene = new Scene(root, 500, 540);
         stage.setTitle("Avaliações");
