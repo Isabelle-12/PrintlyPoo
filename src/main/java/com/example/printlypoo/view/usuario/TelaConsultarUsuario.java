@@ -80,15 +80,9 @@ public class TelaConsultarUsuario {
         btnExcluir.setOnAction(e -> {
             int idx = tabela.getSelectionModel().getSelectedIndex();
             if (idx >= 0) {
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                        "Deseja excluir este usuário?",
-                        ButtonType.YES, ButtonType.NO);
-                confirm.showAndWait().ifPresent(resp -> {
-                    if (resp == ButtonType.YES) {
-                        ctrl.excluir(idx);
-                        tabela.getItems().remove(idx);
-                    }
-                });
+                Usuario u = lista.get(idx);
+                new TelaExcluirUsuario().exibir(u, idx); // ← abre a tela dedicada
+                stage.close();
             } else {
                 new Alert(Alert.AlertType.WARNING,
                         "Selecione um usuário na tabela.").showAndWait();
