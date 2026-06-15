@@ -41,7 +41,7 @@ public class TelaAtualizarUsuario {
         Label lblMsg = new Label("");
         Button btnSalvar = new Button("Salvar alterações");
         Button btnCancelar = new Button("Voltar");
-        btnCancelar.setOnAction(e -> stage.close());
+        
 
 
         btnSalvar.setOnAction(e -> {
