@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FabricanteDAO {
 
-    private static final String ARQUIVO = "data/fabricantes.dat";
+    private static final String ARQUIVO = "data/fabricantes.txt";
 
     private void salvarTodos(List<Fabricante> lista) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(
