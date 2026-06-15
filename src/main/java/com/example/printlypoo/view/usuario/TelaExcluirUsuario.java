@@ -24,7 +24,7 @@ public class TelaExcluirUsuario {
 
         Button btnConfirmar = new Button("Confirmar Exclusão");
         Button btnCancelar = new Button("Voltar");
-        btnCancelar.setOnAction(e -> stage.close());
+        
 
         btnConfirmar.setOnAction(e -> {
             try {
