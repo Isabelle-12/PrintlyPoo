@@ -67,15 +67,9 @@ public class TelaConsultarAnuncio {
         btnExcluir.setOnAction(e -> {
             int idx = tabela.getSelectionModel().getSelectedIndex();
             if (idx >= 0) {
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                        "Deseja excluir este anúncio?",
-                        ButtonType.YES, ButtonType.NO);
-                confirm.showAndWait().ifPresent(resp -> {
-                    if (resp == ButtonType.YES) {
-                        ctrl.excluir(idx);
-                        tabela.getItems().remove(idx);
-                    }
-                });
+                AnuncioGlobal a = lista.get(idx);
+                new TelaExcluirAnuncio().exibir(a, idx); // ← abre a tela dedicada
+                stage.close();
             } else {
                 new Alert(Alert.AlertType.WARNING,
                         "Selecione um anúncio na tabela.").showAndWait();
