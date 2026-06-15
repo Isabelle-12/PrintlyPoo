@@ -7,27 +7,43 @@ import java.util.List;
 
 public class MaterialMakerController {
 
-    private static final String ARQUIVO = "Printlypoo/data" + File.separator + "materiais.txt";
+    private static final String ARQUIVO = "data" + File.separator + "materiais.txt";
 
     public void salvarMaterial(String id, String tipo, double preco) {
-
         List<MaterialMaker> lista = listarMateriais();
-
-
         lista.add(new MaterialMaker(id, tipo, preco));
+        salvarLista(lista);
+    }
 
 
+    public void atualizarMaterial(String id, String novoTipo, double novoPreco) {
+        List<MaterialMaker> lista = listarMateriais();
+        for (MaterialMaker m : lista) {
+            if (m.getIdFabricante().equals(id)) {
+                m.setTipoMaterial(novoTipo);
+                m.setPrecoPorGrama(novoPreco);
+                break;
+            }
+        }
+        salvarLista(lista);
+    }
+
+
+    public void excluirMaterial(String id) {
+        List<MaterialMaker> lista = listarMateriais();
+        lista.removeIf(m -> m.getIdFabricante().equals(id));
+        salvarLista(lista);
+    }
+
+    private void salvarLista(List<MaterialMaker> lista) {
         File arquivo = new File(ARQUIVO);
         if (arquivo.getParentFile() != null) {
             arquivo.getParentFile().mkdirs();
         }
-
-        //Grava a lista inteira atualizada usando ObjectOutputStream
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(arquivo))) {
             oos.writeObject(lista);
-            System.out.println("Material salvo com sucesso usando ObjectOutputStream!");
         } catch (IOException e) {
-            System.out.println("Erro ao salvar material: " + e.getMessage());
+            System.out.println("Erro ao salvar materiais: " + e.getMessage());
         }
     }
 
@@ -35,10 +51,7 @@ public class MaterialMakerController {
     public List<MaterialMaker> listarMateriais() {
         List<MaterialMaker> lista = new ArrayList<>();
         File file = new File(ARQUIVO);
-
-
         if (!file.exists()) return lista;
-
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             lista = (List<MaterialMaker>) ois.readObject();

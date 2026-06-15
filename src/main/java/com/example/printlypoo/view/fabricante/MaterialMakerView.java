@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 
 public class MaterialMakerView extends Application {
     private MaterialMakerController controller = new MaterialMakerController();
-
-
     private TableView<MaterialMaker> tabela = new TableView<>();
 
     public static void main(String[] args) { launch(args); }
@@ -37,7 +35,6 @@ public class MaterialMakerView extends Application {
         Button btnAtualizar = new Button("Atualizar");
         Button btnExcluir = new Button("Excluir");
 
-        // config das coluna
         TableColumn<MaterialMaker, String> colId = new TableColumn<>("ID Fabricante");
         colId.setCellValueFactory(new PropertyValueFactory<>("idFabricante"));
 
@@ -47,31 +44,51 @@ public class MaterialMakerView extends Application {
         TableColumn<MaterialMaker, Double> colPreco = new TableColumn<>("Preço/g");
         colPreco.setCellValueFactory(new PropertyValueFactory<>("precoPorGrama"));
 
-        // tabelas
         tabela.getColumns().addAll(colId, colTipo, colPreco);
-
-
         atualizarTabela();
 
-        // faz o botao salvar
+        tabela.getSelectionModel().selectedItemProperty().addListener((obs, antigo, selecionado) -> {
+            if (selecionado != null) {
+                txtId.setText(selecionado.getIdFabricante());
+                txtId.setEditable(false); // ID vira chave primária, não edita
+                txtTipo.setText(selecionado.getTipoMaterial());
+                txtPreco.setText(String.valueOf(selecionado.getPrecoPorGrama()));
+            }
+        });
+
         btnSalvar.setOnAction(e -> {
             try {
                 double preco = Double.parseDouble(txtPreco.getText());
                 controller.salvarMaterial(txtId.getText(), txtTipo.getText(), preco);
-
-
+                limparCampos(txtId, txtTipo, txtPreco);
                 atualizarTabela();
-
-                // Limpa tudo
-                txtId.clear();
-                txtTipo.clear();
-                txtPreco.clear();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Material salvo com sucesso!");
-                alert.showAndWait();
+                new Alert(Alert.AlertType.INFORMATION, "Material salvo com sucesso!").showAndWait();
             } catch (NumberFormatException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Por favor, digite um número válido no preço!");
-                alert.showAndWait();
+                new Alert(Alert.AlertType.ERROR, "Por favor, digite um preço válido!").showAndWait();
+            }
+        });
+
+        btnAtualizar.setOnAction(e -> {
+            try {
+                double preco = Double.parseDouble(txtPreco.getText());
+                controller.atualizarMaterial(txtId.getText(), txtTipo.getText(), preco);
+                limparCampos(txtId, txtTipo, txtPreco);
+                atualizarTabela();
+                new Alert(Alert.AlertType.INFORMATION, "Material atualizado com sucesso!").showAndWait();
+            } catch (NumberFormatException ex) {
+                new Alert(Alert.AlertType.ERROR, "Por favor, digite um preço válido!").showAndWait();
+            }
+        });
+
+        btnExcluir.setOnAction(e -> {
+            MaterialMaker selecionado = tabela.getSelectionModel().getSelectedItem();
+            if (selecionado != null) {
+                controller.excluirMaterial(selecionado.getIdFabricante());
+                limparCampos(txtId, txtTipo, txtPreco);
+                atualizarTabela();
+                new Alert(Alert.AlertType.INFORMATION, "Material excluído com sucesso!").showAndWait();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Selecione um material na tabela para excluir!").showAndWait();
             }
         });
 
@@ -90,8 +107,14 @@ public class MaterialMakerView extends Application {
         stage.show();
     }
 
-    // busca os materiais
     private void atualizarTabela() {
         tabela.setItems(FXCollections.observableArrayList(controller.listarMateriais()));
+    }
+
+    private void limparCampos(TextField id, TextField tipo, TextField preco) {
+        id.clear();
+        id.setEditable(true);
+        tipo.clear();
+        preco.clear();
     }
 }
