@@ -34,6 +34,7 @@ public class MaterialMakerView extends Application {
         Button btnSalvar = new Button("Salvar");
         Button btnAtualizar = new Button("Atualizar");
         Button btnExcluir = new Button("Excluir");
+        Button btnLimpar = new Button("Limpar");
 
         TableColumn<MaterialMaker, String> colId = new TableColumn<>("ID Fabricante");
         colId.setCellValueFactory(new PropertyValueFactory<>("idFabricante"));
@@ -68,6 +69,11 @@ public class MaterialMakerView extends Application {
             }
         });
 
+
+        btnLimpar.setOnAction(e ->{
+            new Alert(Alert.AlertType.WARNING, "Material limpo com sucesso!").showAndWait();
+        });
+
         btnAtualizar.setOnAction(e -> {
             try {
                 double preco = Double.parseDouble(txtPreco.getText());
@@ -99,7 +105,7 @@ public class MaterialMakerView extends Application {
         grid.add(lblTipo, 0, 1); grid.add(txtTipo, 1, 1);
         grid.add(lblPreco, 0, 2); grid.add(txtPreco, 1, 2);
 
-        HBox botoes = new HBox(10, btnSalvar, btnAtualizar, btnExcluir);
+        HBox botoes = new HBox(10, btnSalvar, btnAtualizar, btnExcluir, btnLimpar);
         VBox layout = new VBox(10, grid, botoes, tabela);
         layout.setPadding(new Insets(15));
 

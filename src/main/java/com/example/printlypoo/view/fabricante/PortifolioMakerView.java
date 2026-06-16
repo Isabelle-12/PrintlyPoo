@@ -45,19 +45,42 @@ public class PortifolioMakerView extends Application {
         colImg.setCellValueFactory(new PropertyValueFactory<>("caminhoImagem"));
 
         tabela.getColumns().addAll(colTitulo, colDesc, colImg);
-
         atualizarTabela();
+
+        // Escutador de clique na tabela
+        tabela.getSelectionModel().selectedItemProperty().addListener((obs, antigo, selecionado) -> {
+            if (selecionado != null) {
+                txtTitulo.setText(selecionado.getTitulo());
+                txtTitulo.setEditable(false); // Bloqueia o título para usar como ID
+                txtDesc.setText(selecionado.getDescricaoTecnica());
+                txtImg.setText(selecionado.getCaminhoImagem());
+            }
+        });
 
         btnSalvar.setOnAction(e -> {
             controller.salvarPortifolio(txtTitulo.getText(), txtDesc.getText(), txtImg.getText());
+            limparCampos(txtTitulo, txtDesc, txtImg);
             atualizarTabela();
+            new Alert(Alert.AlertType.INFORMATION, "Item de portifólio salvo com sucesso!").showAndWait();
+        });
 
-            txtTitulo.clear();
-            txtDesc.clear();
-            txtImg.clear();
+        btnAtualizar.setOnAction(e -> {
+            controller.atualizarPortifolio(txtTitulo.getText(), txtDesc.getText(), txtImg.getText());
+            limparCampos(txtTitulo, txtDesc, txtImg);
+            atualizarTabela();
+            new Alert(Alert.AlertType.INFORMATION, "Portifólio atualizado com sucesso!").showAndWait();
+        });
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Item de portifólio salvo com sucesso!");
-            alert.showAndWait();
+        btnExcluir.setOnAction(e -> {
+            PortifolioMaker selecionado = tabela.getSelectionModel().getSelectedItem();
+            if (selecionado != null) {
+                controller.excluirPortifolio(selecionado.getTitulo());
+                limparCampos(txtTitulo, txtDesc, txtImg);
+                atualizarTabela();
+                new Alert(Alert.AlertType.INFORMATION, "Portifólio excluído com sucesso!").showAndWait();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Selecione um item na tabela para excluir!").showAndWait();
+            }
         });
 
         GridPane grid = new GridPane();
@@ -77,5 +100,12 @@ public class PortifolioMakerView extends Application {
 
     private void atualizarTabela() {
         tabela.setItems(FXCollections.observableArrayList(controller.listarPortifolios()));
+    }
+
+    private void limparCampos(TextField titulo, TextField desc, TextField img) {
+        titulo.clear();
+        titulo.setEditable(true);
+        desc.clear();
+        img.clear();
     }
 }
